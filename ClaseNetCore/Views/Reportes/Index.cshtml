@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewData["Title"] = "Reporte";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Local</label>
+            <select id="CorreoLocal" class="form-control" asp-items="ViewBag.CorreoLocal"></select>
+        </div>
+    </div>
+</div>
+<div class="row">
+    
+    <div class="col-md-12" id="chartContainer2" style="height: 300px; width:350px"></div>
+</div>
+@section Scripts
+{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script>
+      var datos =  $("#CorreoLocal").val();
+
+        window.onload = function () {
+            $.ajax({
+                type: "GET",
+                url: "reporteProductos",
+                data: { correo: datos },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data1) {
+                    var datos = JSON.parse(data1);                    
+
+                    var chart2 = new CanvasJS.Chart("chartContainer2",
+                        {
+                            title: {
+                                text: "Personas"
+                            }, legend: {
+                                verticalAlign: "bottom",
+                                horizontalAlign: "center"
+                            },
+                            data: [
+                                {
+                                    dataPoints: datos                                   
+                                }
+                            ]
+                        });
+
+                    chart2.render();
+
+                }
+            });
+
+        }
+
+        $("#CorreoLocal").change(function ()
+        {
+            var datos1 =  $("#CorreoLocal").val();
+            $.ajax({
+                type: "GET",
+                url: "reporteProductos",
+                data: { correo: datos1 },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data1) {
+                    var datos = JSON.parse(data1);
+                    
+
+                    var chart2 = new CanvasJS.Chart("chartContainer2",
+                        {
+                            title: {
+                                text: "Personas"
+                            }, legend: {
+                                verticalAlign: "bottom",
+                                horizontalAlign: "center"
+                            },
+                            data: [
+                                {
+                                    dataPoints: datos
+                                   
+                                }
+                            ]
+                        });
+
+                    chart2.render();
+
+                }
+            });
+        });
+
+
+    </script>
+}
+
+
